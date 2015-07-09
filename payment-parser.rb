@@ -1,11 +1,7 @@
 require 'csv'
 require 'json'
-require 'pry-byebug'
 
 puts "firing up script"
-
-# @arr_of_arrs = CSV.read("payments5551751213796190177.csv")
-# puts "read csv..."
 
 def sets_old
   puts "setting old"
@@ -30,8 +26,6 @@ def sets_new
   @mega_new_array["data"].each do |element|
     @mega_new_hash[element[10]] += [element]
   end
-  puts "old hash set"
-
   puts "new hash set"
 end
 
@@ -86,10 +80,6 @@ def compare_key(key)
   end
 end
 
-
-
-#
-
 def generate_report(element, type)
   if type == "PAYEE DELETED"
     CSV.open("TRANSPARENCYREPORTJULY15DELETE.csv", "a") do |csv|
@@ -123,21 +113,3 @@ end
   compare_key(key)
   @count += 1
 end
-
-puts "done!"
-binding.pry
-puts "really done"
-
-#def compare_error(key)
-#    if @mega_new_hash[key] == []
-#        generate_report(key, "DELETED")
-#    elsif @mega_hash[key][10] != @mega_new_hash[key][10]
-#        generate_report(key, "ALTERED PAYEE")
-#     elsif @mega_hash[key][13] != @mega_new_hash[key][13]
-#        generate_report(key, "ALTERED AMOUNT")
-#    elsif @mega_hash[key][11] != @mega_new_hash[key][11]
-#        generate_report(key, "ALTERED DEPARTMENT")
-#     elsif @mega_hash[key][12] != @mega_new_hash[key][12]
-#        generate_report(key, "ALTERED DATE")
-#     end
-# end
