@@ -4,8 +4,8 @@ require_relative 'data_parser'
 
 
 parser = DataParser.new
-old_data_hash = parser.hash_this_json 'rows.json'
-new_data_hash = parser.hash_this_json 'rowsnew.json'
+june_data = parser.hash_this_json 'data/june.json'
+august_data = parser.hash_this_json 'data/august.json'
 
 
 ##### EXPECT LOTS OF DOWNSTREAM BUGS #####
@@ -16,7 +16,7 @@ def second_check(element, key)
    @payer_time = false
    @subject_line = false
    @amount_time = false
-   new_data_hash[key].each do |new_element|
+   august_data[key].each do |new_element|
       if element[-4..-2] == new_element[-4..-2] && element[-1].to_i == new_element[-1].to_i
         @payer_time = true
       elsif element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
@@ -39,13 +39,13 @@ def second_check(element, key)
 end
 
 def compare_key(key)
-  if new_data_hash[key] == []
+  if august_data[key] == []
     generate_report(key, "PAYEE DELETED")
   else
 
-    old_data_hash[key].each do |element|
+    june_data[key].each do |element|
       @checker = false
-      new_data_hash[key].each do |new_element|
+      august_data[key].each do |new_element|
         if element[-5..-2] == new_element[-5..-2] && element[-1].to_i == new_element[-1].to_i
           @checker = true
         end
@@ -84,7 +84,7 @@ def generate_report(element, type)
    puts "#{type}"
 end
 
-old_data_hash.keys.each do |key|
+june_data.keys.each do |key|
   if @count % 100 == 0
     puts "comparing #{@count} AT #{key}"
   end

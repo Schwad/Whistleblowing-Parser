@@ -8,7 +8,7 @@ class DataParser
     end
   end
 
-  private
+  # private
 
   def data_from(json_file)
     parse_this(json_file)["data"]
