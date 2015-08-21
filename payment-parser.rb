@@ -1,37 +1,16 @@
 require 'csv'
 require 'json'
+require_relative 'data_parser'
+
+
 
 puts "firing up script"
+parser = DataParser.new
+old_data_hash = parser.hash_this_json 'rows.json'
+new_data_hash = parser.hash_this_json 'rowsnew.json'
 
-def sets_old
-  puts "setting old"
-  file = File.read('rows.json')
-  @mega_array = JSON.parse(file)
-  puts "set array"
-  puts "setting hash"
-  @mega_hash = Hash.new []
-  @mega_array["data"].each do |element|
-    @mega_hash[element[10]] += [element]
-  end
-  puts "old hash set"
-end
+##### EXPECT LOTS OF DOWNSTREAM BUGS #####
 
-def sets_new
-  puts "setting new"
-  file = File.read('rowsnew.json')
-  @mega_new_array = JSON.parse(file)
-  puts "set new array"
-  puts "setting  new hash"
-  @mega_new_hash = Hash.new []
-  @mega_new_array["data"].each do |element|
-    @mega_new_hash[element[10]] += [element]
-  end
-  puts "new hash set"
-end
-
-
-sets_old
-sets_new
 @count = 1
 
 def second_check(element, key)
