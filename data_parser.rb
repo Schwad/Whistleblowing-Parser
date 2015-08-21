@@ -15,6 +15,6 @@ class DataParser
   end
 
   def parse_this(json_file)
-    JSON.parse File.read json_file
+    JSON.parse(File.read(json_file))
   end
 end

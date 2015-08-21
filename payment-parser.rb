@@ -3,11 +3,10 @@ require 'json'
 require_relative 'data_parser'
 
 
-
-puts "firing up script"
 parser = DataParser.new
 old_data_hash = parser.hash_this_json 'rows.json'
 new_data_hash = parser.hash_this_json 'rowsnew.json'
+
 
 ##### EXPECT LOTS OF DOWNSTREAM BUGS #####
 
@@ -17,7 +16,7 @@ def second_check(element, key)
    @payer_time = false
    @subject_line = false
    @amount_time = false
-   @mega_new_hash[key].each do |new_element|
+   new_data_hash[key].each do |new_element|
       if element[-4..-2] == new_element[-4..-2] && element[-1].to_i == new_element[-1].to_i
         @payer_time = true
       elsif element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
@@ -40,13 +39,13 @@ def second_check(element, key)
 end
 
 def compare_key(key)
-  if @mega_new_hash[key] == []
+  if new_data_hash[key] == []
     generate_report(key, "PAYEE DELETED")
   else
 
-    @mega_hash[key].each do |element|
+    old_data_hash[key].each do |element|
       @checker = false
-      @mega_new_hash[key].each do |new_element|
+      new_data_hash[key].each do |new_element|
         if element[-5..-2] == new_element[-5..-2] && element[-1].to_i == new_element[-1].to_i
           @checker = true
         end
@@ -85,7 +84,7 @@ def generate_report(element, type)
    puts "#{type}"
 end
 
-@mega_hash.keys.each do |key|
+old_data_hash.keys.each do |key|
   if @count % 100 == 0
     puts "comparing #{@count} AT #{key}"
   end
