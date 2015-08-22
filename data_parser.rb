@@ -3,12 +3,12 @@ require 'json'
 class DataParser
 
   def hash_this_json(json_file)
-    data_from(json_file).each_with_object({}) do |element, hashed_data|
+    data_from(json_file).each_with_object(Hash.new []) do |element, hashed_data|
       hashed_data[element[10]] += [element]
     end
   end
 
-  # private
+  private
 
   def data_from(json_file)
     parse_this(json_file)["data"]
