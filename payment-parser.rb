@@ -1,44 +1,22 @@
 require 'csv'
 require 'json'
-
-puts "firing up script"
-
-def sets_old
-  puts "setting old"
-  file = File.read('rows.json')
-  @mega_array = JSON.parse(file)
-  puts "set array"
-  puts "setting hash"
-  @mega_hash = Hash.new []
-  @mega_array["data"].each do |element|
-    @mega_hash[element[10]] += [element]
-  end
-  puts "old hash set"
-end
-
-def sets_new
-  puts "setting new"
-  file = File.read('rowsnew.json')
-  @mega_new_array = JSON.parse(file)
-  puts "set new array"
-  puts "setting  new hash"
-  @mega_new_hash = Hash.new []
-  @mega_new_array["data"].each do |element|
-    @mega_new_hash[element[10]] += [element]
-  end
-  puts "new hash set"
-end
+require_relative 'data_parser'
 
 
-sets_old
-sets_new
+parser = DataParser.new
+june_data = parser.hash_this_json 'data/june.json'
+august_data = parser.hash_this_json 'data/august.json'
+
+
+##### EXPECT LOTS OF DOWNSTREAM BUGS #####
+
 @count = 1
 
 def second_check(element, key)
    @payer_time = false
    @subject_line = false
    @amount_time = false
-   @mega_new_hash[key].each do |new_element|
+   august_data[key].each do |new_element|
       if element[-4..-2] == new_element[-4..-2] && element[-1].to_i == new_element[-1].to_i
         @payer_time = true
       elsif element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
@@ -61,13 +39,13 @@ def second_check(element, key)
 end
 
 def compare_key(key)
-  if @mega_new_hash[key] == []
+  if august_data[key] == []
     generate_report(key, "PAYEE DELETED")
   else
 
-    @mega_hash[key].each do |element|
+    june_data[key].each do |element|
       @checker = false
-      @mega_new_hash[key].each do |new_element|
+      august_data[key].each do |new_element|
         if element[-5..-2] == new_element[-5..-2] && element[-1].to_i == new_element[-1].to_i
           @checker = true
         end
@@ -106,7 +84,7 @@ def generate_report(element, type)
    puts "#{type}"
 end
 
-@mega_hash.keys.each do |key|
+june_data.keys.each do |key|
   if @count % 100 == 0
     puts "comparing #{@count} AT #{key}"
   end
