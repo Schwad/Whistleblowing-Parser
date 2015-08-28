@@ -35,36 +35,24 @@ sets_new
 @count = 1
 
 def second_check(element, key)
-   @payer_time = false
-   @subject_line = false
-   @amount_time = false
    @new_hash[key].each do |new_element|
 
       #Checks for change in payor
       if element[-4..-2] == new_element[-4..-2] && element[-1].to_i == new_element[-1].to_i
-        @payer_time = true
+       generate_report(element, new_element, "PAYOR ALTERED")
       end
 
       #Checks for change in subject
       if element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
         if element[-3].to_i != new_element[-3].to_i
-          @subject_line = true
+          generate_report(element, new_element, "SUBJECT ALTERED")
         end
       end
 
       #Checks for change in amount
       if element[-5..-2] == new_element[-5..-2] && element[-1].to_i != new_element[-1].to_i
-        @amount_time = true
+        generate_report(element, new_element, "AMOUNT ALTERED")
       end
-   end
-   if @subject_line == true
-     generate_report(element, "SUBJECT ALTERED")
-   elsif @payer_time == true
-     generate_report(element, "PAYOR ALTERED")
-   elsif @amount_time == true
-      generate_report(element, "AMOUNT ALTERED")
-   else
-     generate_report(element, "ALTERED")
    end
 end
 
@@ -88,27 +76,27 @@ def compare_key(key)
   end
 end
 
-def generate_report(element, type)
+def generate_report(element, new_element, type)
   if type == "PAYEE DELETED"
     CSV.open("TRANSPARENCYREPORTJULY15DELETE.csv", "a") do |csv|
         csv << ["#{element}", "DELETED"]
     end
   elsif type == "AMOUNT ALTERED"
     CSV.open("TRANSPARENCYREPORTJULY15ALTERAMOUNT.csv", "a") do |csv|
-          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{type}"]
+          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
   elsif type == "SUBJECT ALTERED"
 
     CSV.open("TRANSPARENCYREPORTJULY15ALTERSUBJECT.csv", "a") do |csv|
-          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{type}"]
+          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
   elsif type == "PAYOR ALTERED"
     CSV.open("TRANSPARENCYREPORTJULY15ALTERPAYOR.csv", "a") do |csv|
-          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{type}"]
+          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
   else
     CSV.open("TRANSPARENCYREPORTJULY15ALTERGENERIC.csv", "a") do |csv|
-          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{type}"]
+          csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
     end
   end
    puts "#{type}"
