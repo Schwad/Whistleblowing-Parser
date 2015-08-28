@@ -39,18 +39,26 @@ def second_check(element, key)
    @subject_line = false
    @amount_time = false
    @new_hash[key].each do |new_element|
+
+      #Checks for change in payor
       if element[-4..-2] == new_element[-4..-2] && element[-1].to_i == new_element[-1].to_i
         @payer_time = true
-      elsif element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
+      end
+
+      #Checks for change in subject
+      if element[-5..-4] == new_element[-5..-4] && element[-1].to_i == new_element[-1].to_i
         if element[-3].to_i != new_element[-3].to_i
           @subject_line = true
         end
-      elsif element[-5..-2] == new_element[-5..-2] && element[-1].to_i != new_element[-1].to_i
+      end
+
+      #Checks for change in amount
+      if element[-5..-2] == new_element[-5..-2] && element[-1].to_i != new_element[-1].to_i
         @amount_time = true
       end
    end
    if @subject_line == true
-     generate report(element, "SUBJECT ALTERED")
+     generate_report(element, "SUBJECT ALTERED")
    elsif @payer_time == true
      generate_report(element, "PAYOR ALTERED")
    elsif @amount_time == true
