@@ -29,11 +29,6 @@ def sets_new
   puts "new hash set"
 end
 
-
-sets_old
-sets_new
-@count = 1
-
 def second_check(element, key)
    @new_hash[key].each do |new_element|
 
@@ -102,10 +97,17 @@ def generate_report(element, new_element, type)
    puts "#{type}"
 end
 
-@old_hash.keys.each do |key|
-  if @count % 100 == 0
-    puts "comparing #{@count} AT #{key}"
+def run_script
+  sets_old
+  sets_new
+  count = 1
+  @old_hash.keys.each do |key|
+    if count % 100 == 0
+      puts "comparing #{count} AT #{key}"
+    end
+    compare_key(key)
+    count += 1
   end
-  compare_key(key)
-  @count += 1
 end
+
+run_script
