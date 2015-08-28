@@ -1,7 +1,7 @@
 require 'csv'
 require 'json'
 
-puts "firing up script"
+puts "Firing up script..."
 
 def sets_old
   puts "setting old"
@@ -13,20 +13,19 @@ def sets_old
   old_data["data"].each do |element|
     @old_hash[element[10]] += [element]
   end
-  puts "old hash set"
+  puts "Hash of old data is set."
 end
 
 def sets_new
-  puts "setting new"
+  puts "Reading in new data..."
   file = File.read('rowsnew.json')
   new_data = JSON.parse(file)
-  puts "set new array"
-  puts "setting  new hash"
+  puts "Setting hash of new data..."
   @new_hash = Hash.new []
   new_data["data"].each do |element|
     @new_hash[element[10]] += [element]
   end
-  puts "new hash set"
+  puts "Hash of new data set."
 end
 
 def second_check(element, key)
@@ -55,7 +54,6 @@ def compare_key(key)
   if @new_hash[key] == []
     generate_report(key, "PAYEE DELETED")
   else
-
     @old_hash[key].each do |element|
       @checker = false
       @new_hash[key].each do |new_element|
