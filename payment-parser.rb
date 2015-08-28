@@ -6,11 +6,11 @@ puts "firing up script"
 def sets_old
   puts "setting old"
   file = File.read('rows.json')
-  @old_data = JSON.parse(file)
+  old_data = JSON.parse(file)
   puts "set array"
   puts "setting hash"
   @old_hash = Hash.new []
-  @old_data["data"].each do |element|
+  old_data["data"].each do |element|
     @old_hash[element[10]] += [element]
   end
   puts "old hash set"
@@ -19,11 +19,11 @@ end
 def sets_new
   puts "setting new"
   file = File.read('rowsnew.json')
-  @new_data = JSON.parse(file)
+  new_data = JSON.parse(file)
   puts "set new array"
   puts "setting  new hash"
   @new_hash = Hash.new []
-  @new_data["data"].each do |element|
+  new_data["data"].each do |element|
     @new_hash[element[10]] += [element]
   end
   puts "new hash set"
