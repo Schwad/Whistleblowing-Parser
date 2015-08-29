@@ -3,7 +3,7 @@ require 'json'
 
 puts "Firing up script..."
 
-def sets_old
+def sets_old_data_to_memory
   puts "setting old"
   file = File.read('rows.json')
   old_data = JSON.parse(file)
@@ -16,7 +16,7 @@ def sets_old
   puts "Hash of old data is set."
 end
 
-def sets_new
+def sets_new_data_to_memory
   puts "Reading in new data..."
   file = File.read('rowsnew.json')
   new_data = JSON.parse(file)
@@ -70,20 +70,22 @@ def compare_key(key)
 end
 
 def generate_report(element, new_element, type)
-  if type == "PAYEE DELETED"
+
+  case type
+  when  "PAYEE DELETED"
     CSV.open("TRANSPARENCYREPORTJULY15DELETE.csv", "a") do |csv|
         csv << ["#{element}", "DELETED"]
     end
-  elsif type == "AMOUNT ALTERED"
+  when "AMOUNT ALTERED"
     CSV.open("TRANSPARENCYREPORTJULY15ALTERAMOUNT.csv", "a") do |csv|
           csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
-  elsif type == "SUBJECT ALTERED"
+  when "SUBJECT ALTERED"
 
     CSV.open("TRANSPARENCYREPORTJULY15ALTERSUBJECT.csv", "a") do |csv|
           csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
-  elsif type == "PAYOR ALTERED"
+  when "PAYOR ALTERED"
     CSV.open("TRANSPARENCYREPORTJULY15ALTERPAYOR.csv", "a") do |csv|
           csv << ["#{element[1]}","#{element[9]}", "#{element[10]}", "#{element[11]}", "#{element[12]}", "#{element[13]}", "#{new_element[1]}","#{new_element[9]}", "#{new_element[10]}", "#{new_element[11]}", "#{new_element[12]}", "#{new_element[13]}", "#{type}"]
         end
@@ -96,8 +98,8 @@ def generate_report(element, new_element, type)
 end
 
 def run_script
-  sets_old
-  sets_new
+  sets_old_data_to_memory
+  sets_new_data_to_memory
   count = 1
   @old_hash.keys.each do |key|
     if count % 100 == 0
